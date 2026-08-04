@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import StepCard from './components/StepCard.vue'
 import MetaRow from './components/MetaRow.vue'
 import {
   connectPolkadot,
@@ -13,7 +12,7 @@ import {
 import { connectSolanaWallet, isValidSolanaAddress, NoSolanaWalletError } from './lib/solana'
 import { ApiError, findMigrationFor, registerMigration, type WalletMigration } from './lib/api'
 
-// ── Step 1 — Polkadot wallet ────────────────────────────────
+// ── Polkadot square ─────────────────────────────────────────
 const polkadotStatus = ref<'idle' | 'connecting' | 'ready'>('idle')
 const polkadotError = ref('')
 const accounts = ref<PolkadotAccount[]>([])
@@ -23,14 +22,14 @@ const selected = ref<PolkadotAccount | null>(null)
 const check = ref<'idle' | 'checking' | 'unmigrated' | 'migrated' | 'error'>('idle')
 const existing = ref<WalletMigration | null>(null)
 
-// ── Step 2 — Solana destination ─────────────────────────────
+// ── Solana square ───────────────────────────────────────────
 const walletName = ref('')
 const walletAddress = ref('')
 const manualAddress = ref('')
 const solanaNotice = ref('')
 const solanaConnecting = ref(false)
 
-// ── Step 3 — convert ────────────────────────────────────────
+// ── Convert ─────────────────────────────────────────────────
 const submitStatus = ref<'idle' | 'signing' | 'submitting' | 'done'>('idle')
 const submitError = ref('')
 const result = ref<WalletMigration | null>(null)
@@ -43,16 +42,25 @@ const solanaReady = computed(
   () => solanaAddress.value !== '' && isValidSolanaAddress(solanaAddress.value),
 )
 
-const step2Locked = computed(() => !selected.value || check.value !== 'unmigrated')
-const step2LockedHint = computed(() => {
-  if (!selected.value) return 'Connect your Polkadot wallet and choose an account first.'
+const solanaLocked = computed(() => !selected.value || check.value !== 'unmigrated')
+const solanaLockedHint = computed(() => {
+  if (!selected.value) return 'Waiting for a Polkadot account to be selected.'
   if (check.value === 'checking') return 'Checking the migration status of your account…'
   return 'Choose an account that has not been migrated yet.'
 })
-const step3Locked = computed(() => step2Locked.value || !solanaReady.value)
-const step3LockedHint = computed(() =>
-  step2Locked.value ? step2LockedHint.value : 'Choose a Solana destination first.',
-)
+const convertLocked = computed(() => solanaLocked.value || !solanaReady.value)
+
+// Text above the arrow: always the one next thing to do.
+const guidance = computed(() => {
+  if (submitStatus.value === 'done') return 'Migration registered.'
+  if (check.value === 'migrated')
+    return 'This account has already registered its migration. A Polkadot account can register only one Solana destination.'
+  if (!selected.value) return 'Connect your Polkadot wallet and choose the account to migrate.'
+  if (check.value === 'checking') return 'Checking the migration status of your account…'
+  if (check.value === 'error') return 'Could not check the migration status.'
+  if (!solanaReady.value) return 'Choose the Solana wallet that should receive your account.'
+  return 'Ready — press convert and sign one message in your Polkadot wallet.'
+})
 
 function resetSubmit() {
   submitStatus.value = 'idle'
@@ -160,19 +168,7 @@ function convertErrorMessage(e: unknown): string {
 
 <template>
   <header class="top-bar">
-    <span class="top-bar__brand">
-      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-        <rect width="32" height="32" rx="7" fill="rgb(59, 79, 116)" />
-        <path
-          d="M10.5 10.5 L21.5 21.5 M21.5 10.5 L10.5 21.5"
-          stroke="#FFFFFF"
-          stroke-width="3"
-          stroke-linecap="round"
-        />
-      </svg>
-      realXmarket
-    </span>
-    <span class="top-bar__powered">POWERED BY XCAVATE</span>
+    <img class="top-bar__logo" src="/xcavate-logo.png" alt="Xcavate" />
   </header>
 
   <main>
@@ -182,104 +178,192 @@ function convertErrorMessage(e: unknown): string {
         <span class="accent">One signature. Same ownership.</span>
       </h1>
       <p>
-        realXmarket is moving from Polkadot to Solana. Connect the Polkadot wallet you use today,
-        choose the Solana wallet that should receive your account, and sign one message to register
-        the move. Registration is free — nothing is sent on-chain.
+        realXmarket is moving from Polkadot to Solana. Connect both wallets below and sign one
+        message to register the move.
       </p>
     </section>
 
-    <div class="steps">
-      <StepCard :step="1" title="Connect your Polkadot wallet" :done="!!selected">
-        <template v-if="polkadotStatus === 'idle'">
-          <p class="card__hint" style="margin-top: 0">
-            Sign in with the polkadot.js extension to prove you own the account being migrated.
-          </p>
-          <div v-if="polkadotError" class="banner banner--error" style="margin-top: 12px">
-            {{ polkadotError }}
-            <a href="https://polkadot.js.org/extension/" target="_blank" rel="noopener">
-              Get the extension
-            </a>
+    <div class="flow">
+      <!-- ── Polkadot square ──────────────────────────────── -->
+      <section class="square" aria-label="Polkadot — from">
+        <div class="square__head">
+          <svg class="chain-mark" viewBox="0 0 36 36" aria-hidden="true">
+            <g fill="#E6007A">
+              <ellipse cx="18" cy="7" rx="5" ry="3.7" />
+              <ellipse cx="18" cy="29" rx="5" ry="3.7" />
+              <ellipse cx="8.5" cy="12.5" rx="5" ry="3.7" transform="rotate(60 8.5 12.5)" />
+              <ellipse cx="27.5" cy="23.5" rx="5" ry="3.7" transform="rotate(60 27.5 23.5)" />
+              <ellipse cx="8.5" cy="23.5" rx="5" ry="3.7" transform="rotate(-60 8.5 23.5)" />
+              <ellipse cx="27.5" cy="12.5" rx="5" ry="3.7" transform="rotate(-60 27.5 12.5)" />
+            </g>
+          </svg>
+          <div>
+            <span class="square__eyebrow">FROM</span>
+            <h2 class="square__title">Polkadot</h2>
           </div>
-          <button class="btn btn--gradient" style="margin-top: 16px" @click="onConnectPolkadot">
-            CONNECT WALLET
-          </button>
-        </template>
-
-        <div v-else-if="polkadotStatus === 'connecting'" class="progress-note">
-          <span class="spinner" aria-hidden="true"></span>
-          Waiting for the extension…
         </div>
 
-        <template v-else>
-          <p class="field__label" style="padding: 0">Choose the account to migrate</p>
-          <div class="account-list" style="margin-top: 12px">
-            <button
-              v-for="account in accounts"
-              :key="account.address"
-              class="account-row"
-              :class="{ 'account-row--selected': selected?.address === account.address }"
-              :title="account.address"
-              @click="onSelectAccount(account)"
-            >
-              <span>
-                <span class="account-row__name">{{ account.name || 'Unnamed account' }}</span>
-                <br />
-                <span class="account-row__address">{{ shortAddress(account.address, 10) }}</span>
-              </span>
-              <span v-if="selected?.address === account.address" class="badge badge--success">
-                SELECTED
-              </span>
+        <div class="square__body">
+          <template v-if="polkadotStatus === 'idle'">
+            <p class="square__hint">
+              Sign in with the polkadot.js extension to prove you own the account being migrated.
+            </p>
+            <div v-if="polkadotError" class="banner banner--error" style="margin-top: 12px">
+              {{ polkadotError }}
+              <a href="https://polkadot.js.org/extension/" target="_blank" rel="noopener">
+                Get the extension
+              </a>
+            </div>
+            <button class="btn btn--gradient" style="margin-top: 16px" @click="onConnectPolkadot">
+              CONNECT WALLET
             </button>
-          </div>
+          </template>
 
-          <div v-if="check === 'checking'" class="progress-note" style="margin-top: 12px">
+          <div v-else-if="polkadotStatus === 'connecting'" class="progress-note">
             <span class="spinner" aria-hidden="true"></span>
-            Checking migration status…
+            Waiting for the extension…
           </div>
-          <div v-else-if="check === 'error'" class="banner banner--error" style="margin-top: 12px">
-            Could not check the migration status.
-            <button class="btn-link" @click="selected && checkMigration(selected)">Retry</button>
-          </div>
-        </template>
-      </StepCard>
 
-      <section v-if="check === 'migrated' && existing" class="card">
-        <div class="card__head">
-          <span class="card__step card__step--done">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path
-                d="M2.5 7.5 L5.5 10.5 L11.5 3.5"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <h2 class="card__title">Already migrated</h2>
-          <span class="badge badge--success" style="margin-left: auto">MIGRATED</span>
-        </div>
-        <div class="card__body">
-          <p style="font-size: 14px; line-height: 22px">
-            This account has already registered its migration. A Polkadot account can register only
-            one Solana destination.
-          </p>
-          <div class="meta" style="margin-top: 16px">
-            <MetaRow label="Polkadot account" :value="existing.ss58address" />
-            <MetaRow label="Migrates to" :value="existing.solanaAddress" />
-          </div>
+          <template v-else>
+            <p class="field__label" style="padding: 0">Choose the account to migrate</p>
+            <div class="account-list square__scroll" style="margin-top: 12px">
+              <button
+                v-for="account in accounts"
+                :key="account.address"
+                class="account-row"
+                :class="{ 'account-row--selected': selected?.address === account.address }"
+                :title="account.address"
+                @click="onSelectAccount(account)"
+              >
+                <span>
+                  <span class="account-row__name">{{ account.name || 'Unnamed account' }}</span>
+                  <br />
+                  <span class="account-row__address">{{ shortAddress(account.address, 10) }}</span>
+                </span>
+                <span v-if="selected?.address === account.address" class="badge badge--success">
+                  SELECTED
+                </span>
+              </button>
+            </div>
+
+            <div v-if="check === 'checking'" class="progress-note" style="margin-top: 12px">
+              <span class="spinner" aria-hidden="true"></span>
+              Checking migration status…
+            </div>
+            <div v-else-if="check === 'error'" class="banner banner--error" style="margin-top: 12px">
+              Could not check the migration status.
+              <button class="btn-link" @click="selected && checkMigration(selected)">Retry</button>
+            </div>
+          </template>
         </div>
       </section>
 
-      <template v-else>
-        <StepCard
-          :step="2"
-          title="Choose your Solana destination"
-          :done="solanaReady && !step2Locked"
-          :locked="step2Locked"
-          :locked-hint="step2LockedHint"
+      <!-- ── The conversion arrow ─────────────────────────── -->
+      <div class="flow__mid">
+        <p class="flow__hint">{{ guidance }}</p>
+
+        <div
+          class="flow__arrow"
+          :class="{
+            'flow__arrow--done': submitStatus === 'done' || check === 'migrated',
+            'flow__arrow--locked':
+              convertLocked && submitStatus !== 'done' && check !== 'migrated',
+          }"
         >
-          <template v-if="walletAddress">
+          <div class="flow__arrow-shape" aria-hidden="true"></div>
+          <div class="flow__center">
+            <div v-if="submitStatus === 'done'" class="tick-disc tick-disc--arrow">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                <path
+                  d="M6 14.5 L11.5 20 L22 8"
+                  stroke="rgb(69, 116, 97)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <span v-else-if="check === 'migrated'" class="badge badge--success badge--arrow">
+              MIGRATED
+            </span>
+            <button
+              v-else
+              class="btn btn--convert"
+              :disabled="convertLocked || submitStatus !== 'idle'"
+              @click="onConvert"
+            >
+              CONVERT
+            </button>
+          </div>
+        </div>
+
+        <div class="flow__status">
+          <div v-if="submitStatus === 'signing'" class="progress-note flow__status-note">
+            <span class="spinner" aria-hidden="true"></span>
+            Waiting for your signature…
+          </div>
+          <div v-else-if="submitStatus === 'submitting'" class="progress-note flow__status-note">
+            <span class="spinner" aria-hidden="true"></span>
+            Registering your migration…
+          </div>
+          <div v-else-if="submitError" class="banner banner--error">
+            {{ submitError }}
+          </div>
+          <p v-else-if="submitStatus === 'done'" class="flow__success">
+            Submitted successfully. Your Polkadot account is now registered to migrate to your
+            Solana wallet.
+          </p>
+          <p v-else class="flow__fineprint">
+            Signing is free — nothing leaves your wallet except the signature. A registration
+            cannot be changed later.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Solana square ────────────────────────────────── -->
+      <section class="square" aria-label="Solana — to">
+        <div class="square__head">
+          <svg class="chain-mark" viewBox="0 0 36 36" aria-hidden="true">
+            <defs>
+              <linearGradient id="sol-grad" x1="0" y1="36" x2="36" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#9945FF" />
+                <stop offset="1" stop-color="#14F195" />
+              </linearGradient>
+            </defs>
+            <g fill="url(#sol-grad)">
+              <path d="M12 7 H32 L26 13.5 H6 Z" />
+              <path d="M6 15 H26 L32 21.5 H12 Z" />
+              <path d="M12 22.5 H32 L26 29 H6 Z" />
+            </g>
+          </svg>
+          <div>
+            <span class="square__eyebrow">TO</span>
+            <h2 class="square__title">Solana</h2>
+          </div>
+        </div>
+
+        <div class="square__body">
+          <template v-if="check === 'migrated' && existing">
+            <div class="banner banner--info">
+              This account already migrated to the Solana address below.
+            </div>
+            <div class="meta" style="margin-top: 16px">
+              <MetaRow label="Migrates to" :value="existing.solanaAddress" />
+            </div>
+          </template>
+
+          <template v-else-if="submitStatus === 'done' && result">
+            <div class="meta">
+              <MetaRow label="Destination" :value="result.solanaAddress" />
+            </div>
+            <p class="square__hint" style="margin-top: 12px">
+              This is where your account will live on Solana.
+            </p>
+          </template>
+
+          <p v-else-if="solanaLocked" class="square__hint">{{ solanaLockedHint }}</p>
+
+          <template v-else-if="walletAddress">
             <div class="meta">
               <MetaRow :label="`Connected ${walletName}`" :value="walletAddress" />
             </div>
@@ -289,7 +373,7 @@ function convertErrorMessage(e: unknown): string {
           </template>
 
           <template v-else>
-            <p class="card__hint" style="margin-top: 0">
+            <p class="square__hint">
               Connect a Solana wallet, or paste the address that should receive your account.
             </p>
             <div v-if="solanaNotice" class="banner banner--info" style="margin-top: 12px">
@@ -324,83 +408,8 @@ function convertErrorMessage(e: unknown): string {
               </span>
             </div>
           </template>
-        </StepCard>
-
-        <StepCard
-          :step="3"
-          title="Convert"
-          :done="submitStatus === 'done'"
-          :locked="step3Locked"
-          :locked-hint="step3LockedHint"
-        >
-          <template v-if="submitStatus === 'done' && result">
-            <div class="success">
-              <div class="tick-disc">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                  <path
-                    d="M6 14.5 L11.5 20 L22 8"
-                    stroke="rgb(69, 116, 97)"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <h3>Submitted successfully</h3>
-              <p>Your Polkadot account is now registered to migrate to your Solana wallet.</p>
-              <div class="meta" style="text-align: left; margin-top: 16px">
-                <MetaRow label="From (Polkadot)" :value="result.ss58address" />
-                <MetaRow label="To (Solana)" :value="result.solanaAddress" />
-              </div>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="meta">
-              <MetaRow label="From (Polkadot)" :value="selected?.address ?? ''" />
-              <MetaRow label="To (Solana)" :value="solanaAddress" />
-            </div>
-            <p class="card__hint">
-              You will be asked to sign a message in your Polkadot wallet. Signing is free and
-              nothing leaves your wallet except the signature. A registration cannot be changed
-              later.
-            </p>
-            <div v-if="submitError" class="banner banner--error" style="margin-top: 12px">
-              {{ submitError }}
-            </div>
-            <div style="display: flex; align-items: center; gap: 16px; margin-top: 16px">
-              <button
-                class="btn btn--primary"
-                :disabled="submitStatus !== 'idle'"
-                @click="onConvert"
-              >
-                CONVERT
-              </button>
-              <div v-if="submitStatus === 'signing'" class="progress-note">
-                <span class="spinner" aria-hidden="true"></span>
-                Waiting for your signature…
-              </div>
-              <div v-else-if="submitStatus === 'submitting'" class="progress-note">
-                <span class="spinner" aria-hidden="true"></span>
-                Registering your migration…
-              </div>
-            </div>
-          </template>
-        </StepCard>
-      </template>
+        </div>
+      </section>
     </div>
   </main>
-
-  <footer class="footer">
-    <div class="footer__row">
-      <span>Powered by Xcavate</span>
-      <span>
-        <a href="https://xcavate.io" target="_blank" rel="noopener">xcavate.io</a>
-        ·
-        <a href="https://github.com/pyrahermesagent/XcavateProfile" target="_blank" rel="noopener">
-          Migration API
-        </a>
-      </span>
-    </div>
-  </footer>
 </template>

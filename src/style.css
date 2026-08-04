@@ -99,55 +99,20 @@ a:hover {
   color: var(--x-blue);
 }
 
-/* ── Header / footer chrome ─────────────────────────────── */
+/* ── Header chrome ──────────────────────────────────────── */
 
 .top-bar {
   height: 80px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
   padding: 0 clamp(16px, 7vw, 107px);
   border-bottom: 1px solid var(--border-bar);
   background: var(--x-white);
 }
 
-.top-bar__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 22px;
-  line-height: 100%;
-  font-weight: 700;
-  color: var(--x-blue);
-}
-
-.top-bar__powered {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  color: var(--x-cyan-deep);
-  white-space: nowrap;
-}
-
-.footer {
-  margin-top: 80px;
-  border-top: 1px solid var(--x-blue);
-  padding: 24px clamp(16px, 7vw, 107px) 32px;
-}
-
-.footer__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-hairline);
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--text-caption);
+.top-bar__logo {
+  height: 34px;
+  display: block;
 }
 
 /* ── Hero ───────────────────────────────────────────────── */
@@ -155,7 +120,7 @@ a:hover {
 .hero {
   max-width: 720px;
   margin: 0 auto;
-  padding: clamp(40px, 8vw, 80px) 24px 40px;
+  padding: clamp(40px, 8vw, 72px) 24px 48px;
   text-align: center;
 }
 
@@ -176,70 +141,170 @@ a:hover {
   max-width: 560px;
 }
 
-/* ── Step cards ─────────────────────────────────────────── */
+/* ── The converter flow: square → arrow → square ────────── */
 
-.steps {
-  max-width: 640px;
+.flow {
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  padding: 0 24px 96px;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(230px, 300px) minmax(300px, 1fr);
+  gap: 24px;
+  align-items: stretch;
 }
 
-.card {
+.square {
   background: var(--x-white);
   border-radius: 8px;
   box-shadow: var(--shadow-card);
   padding: 24px;
+  aspect-ratio: 1 / 1;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
 }
 
-.card__head {
+.square__head {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.card__step {
+.chain-mark {
+  width: 36px;
+  height: 36px;
   flex: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--x-blue-10);
-  color: var(--x-blue);
-  font-size: 14px;
+}
+
+.square__eyebrow {
+  display: block;
+  font-size: 12px;
+  line-height: 18px;
   font-weight: 700;
-  line-height: 100%;
+  letter-spacing: 1.2px;
+  color: var(--text-caption);
 }
 
-.card__step--done {
-  background: var(--x-green-10);
-  color: var(--x-leaf-green);
-}
-
-.card__title {
-  font-size: 18px;
+.square__title {
+  font-size: 20px;
   line-height: 28px;
   font-weight: 600;
   color: var(--text-title);
 }
 
-.card__body {
+.square__body {
   margin-top: 16px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.card__hint {
-  margin-top: 12px;
+.square__hint {
   font-size: 14px;
   line-height: 22px;
   color: var(--text-caption);
 }
 
-.card--locked .card__hint {
-  margin-top: 8px;
+.square__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ── The arrow column ───────────────────────────────────── */
+
+.flow__mid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.flow__hint {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-primary);
+}
+
+.flow__arrow {
+  position: relative;
+  height: 140px;
+}
+
+.flow__arrow-shape {
+  position: absolute;
+  inset: 0;
+  background: var(--x-blue);
+  clip-path: polygon(0 25%, 72% 25%, 72% 5%, 100% 50%, 72% 95%, 72% 75%, 0 75%);
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+
+/* The shimmer — a band of light travelling in the direction of the move. */
+.flow__arrow-shape::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 75%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2.4s var(--ease-standard) infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.flow__arrow--locked .flow__arrow-shape {
+  background: var(--x-blue-50);
+}
+
+.flow__arrow--done .flow__arrow-shape {
+  background: var(--x-leaf-green);
+}
+
+.flow__arrow--done .flow__arrow-shape::after {
+  animation: none;
+}
+
+.flow__center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flow__status {
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flow__status-note {
+  justify-content: center;
+}
+
+.flow__fineprint {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-caption);
+}
+
+.flow__success {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--x-leaf-green);
 }
 
 /* ── Buttons ────────────────────────────────────────────── */
@@ -263,21 +328,6 @@ a:hover {
 .btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.btn--primary {
-  background: var(--x-blue);
-  color: var(--x-white);
-  border-radius: 28px;
-  padding: 13px 21px;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 24px;
-  box-shadow: inset 0 0 0 1px var(--x-blue);
-}
-
-.btn--primary:hover:not(:disabled) {
-  background: rgb(48, 65, 96);
 }
 
 .btn--connect {
@@ -309,8 +359,28 @@ a:hover {
   opacity: 0.9;
 }
 
-.btn--block {
-  width: 100%;
+/* The convert button sits on the arrow, ringed in white so it reads on blue.
+   It stays smaller than the shaft so the arrow shows above and below it. */
+.btn--convert {
+  background: var(--x-blue);
+  color: var(--x-white);
+  border-radius: 28px;
+  padding: 10px 22px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+  box-shadow: 0 0 0 3px var(--x-white);
+}
+
+.btn--convert:hover:not(:disabled) {
+  background: rgb(48, 65, 96);
+}
+
+.btn--convert:disabled {
+  opacity: 1;
+  background: var(--x-white);
+  color: var(--x-blue-50);
+  box-shadow: 0 0 0 3px var(--x-white);
 }
 
 .btn-link {
@@ -412,6 +482,7 @@ a:hover {
   cursor: pointer;
   text-align: left;
   font-family: var(--font-sans);
+  flex: none;
   transition:
     background-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard);
@@ -489,6 +560,12 @@ a:hover {
   color: var(--x-leaf-green);
 }
 
+/* On the arrow the badge needs a solid ground, like the convert button. */
+.badge--arrow {
+  background: var(--x-white);
+  box-shadow: 0 0 0 4px var(--x-white);
+}
+
 .banner {
   display: flex;
   gap: 12px;
@@ -497,6 +574,7 @@ a:hover {
   border-radius: 8px;
   font-size: 14px;
   line-height: 22px;
+  text-align: left;
 }
 
 .banner--info {
@@ -509,7 +587,7 @@ a:hover {
   color: var(--x-coral);
 }
 
-/* ── Status / success ───────────────────────────────────── */
+/* ── Status ─────────────────────────────────────────────── */
 
 .tick-disc {
   width: 56px;
@@ -522,23 +600,9 @@ a:hover {
   margin: 0 auto;
 }
 
-.success {
-  text-align: center;
-  padding: 8px 0;
-}
-
-.success h3 {
-  margin-top: 16px;
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
-  color: var(--text-title);
-}
-
-.success p {
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 22px;
+.tick-disc--arrow {
+  background: var(--x-white);
+  box-shadow: 0 0 0 4px var(--x-white);
 }
 
 .spinner {
@@ -582,4 +646,65 @@ a:hover {
   flex: 1;
   height: 1px;
   background: var(--border-subtle);
+}
+
+/* ── Small screens: squares stack, the arrow points down ── */
+
+@media (max-width: 920px) {
+  .flow {
+    grid-template-columns: minmax(0, 480px);
+    justify-content: center;
+  }
+
+  .square {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  .flow__mid {
+    padding: 8px 0;
+  }
+
+  .flow__arrow {
+    height: 190px;
+    width: min(220px, 70vw);
+    margin: 0 auto;
+  }
+
+  .flow__arrow-shape {
+    clip-path: polygon(20% 0, 80% 0, 80% 62%, 98% 62%, 50% 100%, 2% 62%, 20% 62%);
+  }
+
+  .btn--convert {
+    padding: 8px 16px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .flow__arrow-shape::after {
+    background: linear-gradient(
+      195deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 75%
+    );
+    transform: translateY(-100%);
+    animation-name: shimmer-down;
+  }
+
+  @keyframes shimmer-down {
+    to {
+      transform: translateY(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow__arrow-shape::after {
+    animation: none;
+  }
+
+  .spinner {
+    animation-duration: 1.6s;
+  }
 }
