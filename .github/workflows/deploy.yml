@@ -27,11 +27,10 @@ jobs:
 
       - run: npm ci
 
+      # The site is served from the root of the custom domain
+      # (migration.xcavate.io), so assets must not be rebased under
+      # /<repo-name>/ — leave BASE_PATH unset so Vite builds with base "/".
       - run: npm run build
-        env:
-          # Project pages are served from /<repo-name>/, so built asset URLs
-          # must be rebased. Drop this env var if you deploy to a custom domain.
-          BASE_PATH: /${{ github.event.repository.name }}/
 
       - uses: actions/configure-pages@v5
 
