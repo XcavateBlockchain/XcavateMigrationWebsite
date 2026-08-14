@@ -1,0 +1,47 @@
+/* The /csv export page — one card on the page's own chrome. Loaded only by
+   that entry, so it never weighs on the migration page. */
+
+.export {
+  align-items: center;
+  justify-content: center;
+}
+
+.export__card {
+  width: 100%;
+  max-width: 431px;
+  padding: 32px;
+  border-radius: var(--radius-16);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-panel-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.export__title {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold);
+  color: var(--x-black);
+}
+
+.export__done {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--status-success-ink);
+}
+
+.export__done svg {
+  flex-shrink: 0;
+}
+
+.export__hint {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}

@@ -18,7 +18,8 @@ import {
   type PolkadotAccount,
 } from './lib/polkadot'
 import { connectSolanaWallet, isValidSolanaAddress, NoSolanaWalletError } from './lib/solana'
-import { ApiError, findMigrationFor, registerMigration, type WalletMigration } from './lib/api'
+import { ApiError, registerMigration, type WalletMigration } from './lib/api'
+import { findMigrationFor } from './lib/migration-lookup'
 import { canonicalMigrationBody } from './lib/signing'
 import { receiptJson, type Receipt } from './lib/receipt'
 

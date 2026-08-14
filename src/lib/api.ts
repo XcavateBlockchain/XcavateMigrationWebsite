@@ -1,5 +1,3 @@
-import { decodeAddress } from '@polkadot/util-crypto'
-import { u8aToHex } from '@polkadot/util'
 import { buildPayload, canonicalMigrationBody, isoTimestamp, payloadDigest } from './signing'
 
 export const API_BASE = 'https://profile-api.xcavate.io'
@@ -43,29 +41,6 @@ export async function listMigrations(): Promise<WalletMigration[]> {
   const res = await fetch(`${API_BASE}/api/migrations`)
   if (!res.ok) throw new ApiError(res.status, await errorMessage(res))
   return res.json()
-}
-
-/**
- * Looks up the migration registered for an account. The API keys migrations
- * by the literal SS58 string, so an account registered under a different
- * SS58 prefix would miss on a direct lookup — fall back to comparing public
- * keys across the full list.
- */
-export async function findMigrationFor(ss58address: string): Promise<WalletMigration | null> {
-  const direct = await getMigration(ss58address)
-  if (direct) return direct
-
-  const publicKey = u8aToHex(decodeAddress(ss58address))
-  const all = await listMigrations()
-  return (
-    all.find((m) => {
-      try {
-        return u8aToHex(decodeAddress(m.ss58address)) === publicKey
-      } catch {
-        return false
-      }
-    }) ?? null
-  )
 }
 
 /**

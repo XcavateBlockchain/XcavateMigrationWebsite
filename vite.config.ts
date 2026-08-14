@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -6,4 +7,15 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   base: process.env.BASE_PATH || '/',
+  build: {
+    rollupOptions: {
+      // Two entries, each emitted at its source path: the migration flow at
+      // "/", and the CSV export at "/csv" — Pages serves csv/index.html there
+      // without a router or an SPA fallback.
+      input: {
+        main: fileURLToPath(new URL('index.html', import.meta.url)),
+        csv: fileURLToPath(new URL('csv/index.html', import.meta.url)),
+      },
+    },
+  },
 })
