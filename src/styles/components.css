@@ -1,0 +1,551 @@
+/* Core components — the subset of the design system this page imports:
+   Button, GradientButton, MenuBigButton, StatusBadge, Field, MetaPair,
+   Banner, Modal. Outlined buttons are drawn with `inset 0 0 0 1px` so the
+   stroke never affects layout. */
+
+/* ── Buttons ────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--height-button);
+  padding: 0 28px;
+  border: 0;
+  border-radius: var(--radius-28);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Hover darkens or shifts to Xblue — it never lightens. */
+.btn--primary {
+  background: var(--x-blue);
+  color: var(--text-white);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: rgb(48, 65, 96);
+}
+
+.btn--secondary {
+  color: var(--x-blue);
+  box-shadow: inset 0 0 0 1px var(--x-blue);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--x-blue-5);
+}
+
+/* The one gradient in the system — the connect lockup. Do not invent others. */
+.btn--gradient {
+  background: linear-gradient(
+    90.858deg,
+    rgb(236, 178, 120) -25.46%,
+    rgb(220, 125, 166) 35.16%,
+    rgb(59, 79, 116) 69.39%,
+    rgb(87, 160, 197) 103.46%
+  );
+  color: var(--text-white);
+}
+
+.btn--gradient:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* The quiet, text-only action: CHANGE ACCOUNT, REGISTER ANOTHER ACCOUNT. */
+.btn-inline {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 22px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--x-blue);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.btn-inline:hover {
+  color: var(--x-cyan);
+}
+
+.btn-quiet {
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+  text-decoration: underline;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.btn-quiet:hover {
+  color: var(--x-blue);
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--radius-circle);
+  background: var(--neutral-125);
+  color: var(--x-black);
+  cursor: pointer;
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+
+.btn-icon:hover {
+  background: var(--x-blue-10);
+}
+
+/* ── StatusBadge. Never round a badge into a pill — the two
+      shapes mean different things in this system. ───────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-4);
+  font-size: 12px;
+  line-height: 100%;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge--success {
+  background: var(--x-green-10);
+  color: var(--status-success-ink);
+}
+
+.badge--neutral {
+  background: var(--x-black-10);
+  color: var(--text-caption);
+}
+
+.badge--info {
+  background: var(--x-cyan-10);
+  color: var(--x-blue);
+}
+
+/* ── Field ──────────────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field__label {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--text-caption);
+}
+
+.field__input {
+  width: 100%;
+  height: 58px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius-10);
+  box-shadow: inset 0 0 0 1px var(--neutral-350);
+  background: var(--x-white);
+  font-family: var(--font-wide);
+  font-size: 15px;
+  line-height: 100%;
+  color: var(--x-black);
+  transition: box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.field__input::placeholder {
+  font-family: var(--font-sans);
+  color: var(--x-black-50);
+}
+
+.field__input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--x-blue);
+}
+
+.field__input--invalid {
+  box-shadow: inset 0 0 0 1px var(--x-coral);
+}
+
+.field__hint {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--text-caption);
+}
+
+.field__hint--error {
+  color: var(--x-coral);
+}
+
+/* ── MetaPair — the label + value row every card is built from ── */
+
+.meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.meta__label {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+  white-space: nowrap;
+}
+
+.meta__value {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--x-black);
+  text-align: right;
+  word-break: break-all;
+}
+
+.meta__value--wide {
+  font-family: var(--font-wide);
+}
+
+/* ── Banner ─────────────────────────────────────────────── */
+
+.banner {
+  padding: 14px 16px;
+  border-radius: var(--radius-8);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: var(--font-weight-medium);
+}
+
+.banner--error {
+  background: rgba(255, 59, 48, 0.08);
+  color: var(--x-coral);
+}
+
+.banner--info {
+  background: var(--x-cyan-10);
+  color: var(--x-blue);
+}
+
+.banner a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ── Progress ───────────────────────────────────────────── */
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 2px solid var(--x-blue-20);
+  border-top-color: var(--x-blue);
+  border-radius: var(--radius-circle);
+  animation: rx-spin 0.8s linear infinite;
+}
+
+.spinner--lg {
+  width: 16px;
+  height: 16px;
+}
+
+.progress-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+}
+
+/* ── Avatar disc — a 16px glyph or two initials in a soft disc ── */
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-circle);
+  background: var(--x-cyan-10);
+  color: var(--x-blue);
+  font-size: 14px;
+  line-height: 100%;
+  font-weight: var(--font-weight-bold);
+}
+
+.avatar--sol {
+  background: var(--x-green-10);
+  color: var(--status-success-ink);
+}
+
+/* The wallet identity row: avatar, name, address, trailing action. */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-10);
+}
+
+.identity__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.identity__name {
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--x-black);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identity__address {
+  font-family: var(--font-wide);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+}
+
+.identity__action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 6px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 100%;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  color: var(--x-blue);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.identity__action:hover {
+  color: var(--x-cyan);
+}
+
+/* ── Modal. Scrim is rgba(0,0,0,0.4); no backdrop blur anywhere. ── */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--surface-scrim);
+  overflow-y: auto;
+}
+
+.modal__panel {
+  width: 100%;
+  max-width: 431px;
+  padding: 28px;
+  border-radius: var(--radius-16);
+  background: var(--x-white);
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal__title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold);
+  color: var(--x-black);
+}
+
+.modal__subtitle {
+  font-family: var(--font-wide);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+}
+
+.modal__centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* The 27 category marks are bitmaps in the source and are never redrawn.
+   Inside modals they sit at 84px in a 115px disc of 10% Xcyan. */
+.category-disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 115px;
+  height: 115px;
+  border-radius: var(--radius-circle);
+  background: var(--x-cyan-10);
+}
+
+.category-disc img {
+  width: 84px;
+  height: 84px;
+  display: block;
+}
+
+.modal__body-text {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--text-primary);
+}
+
+.modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.modal__actions--split {
+  flex-direction: row;
+}
+
+.modal__actions--split > * {
+  flex: 1;
+}
+
+.help-steps {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* ── Account list (inside the picker) ───────────────────── */
+
+.account-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border: 0;
+  border-radius: var(--radius-10);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans);
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+
+.account-row:hover {
+  background: var(--surface-sunken);
+}
+
+.account-row__source {
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+  white-space: nowrap;
+}
+
+/* The signed payload, shown verbatim. */
+.payload {
+  padding: 14px 16px;
+  border-radius: var(--radius-10);
+  background: var(--surface-sunken);
+  font-family: var(--font-wide);
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--x-black);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 180px;
+  overflow: auto;
+}

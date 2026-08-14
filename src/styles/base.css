@@ -1,0 +1,101 @@
+/* Base layer — the minimum reset the design's screens assume. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-title);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul {
+  margin: 0;
+}
+
+a {
+  color: var(--x-blue);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--x-cyan);
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--x-cyan-20);
+}
+
+/* The design composes on a 1440 frame; here it is unframed and spans the
+   viewport, the gutter alone holding the chrome off the edges. */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--surface-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.page__main {
+  flex: 1;
+  padding: 72px var(--gutter-desktop) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+@media (max-width: 1100px) {
+  .page__main {
+    padding: 56px 40px 72px;
+    gap: 44px;
+  }
+}
+
+@media (max-width: 720px) {
+  .page__main {
+    padding: 40px var(--gutter-mobile) 56px;
+    gap: 36px;
+  }
+}
+
+/* Focus is never removed, only replaced with the brand ring. */
+:focus-visible {
+  outline: 2px solid var(--x-blue);
+  outline-offset: 2px;
+}
+
+@keyframes rx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

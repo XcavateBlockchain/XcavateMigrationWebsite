@@ -1,0 +1,106 @@
+/* realXmarket design system — tokens transcribed from the design project's
+   _ds/…/tokens/*.css. Values are verbatim; only the subset this page uses is
+   carried over. The ramp convention is ALPHA, not lightness: the number after
+   the dash is the opacity percentage of the base hue. */
+
+:root {
+  /* ── Primary ─────────────────────────────────────────── */
+  --x-blue: rgb(59, 79, 116);
+  --x-cyan: rgb(87, 160, 197);
+  --x-orange: rgb(236, 178, 120);
+  --x-pink: rgb(220, 125, 166);
+
+  /* ── Secondary ───────────────────────────────────────── */
+  --x-purple: rgb(150, 120, 174);
+  --x-leaf-green: rgb(69, 116, 97);
+  --x-green: rgb(120, 179, 110);
+
+  /* ── General ─────────────────────────────────────────── */
+  --x-black: rgb(78, 78, 78);
+  --x-white: rgb(255, 255, 255);
+  --x-coral: rgb(255, 59, 48);
+
+  /* ── Alpha ramps ─────────────────────────────────────── */
+  --x-blue-50: rgba(59, 79, 116, 0.5);
+  --x-blue-30: rgba(59, 79, 116, 0.3);
+  --x-blue-20: rgba(59, 79, 116, 0.2);
+  --x-blue-10: rgba(59, 79, 116, 0.1);
+  --x-blue-5: rgba(59, 79, 116, 0.05);
+  --x-black-50: rgba(78, 78, 78, 0.5);
+  --x-black-10: rgba(78, 78, 78, 0.1);
+  --x-cyan-20: rgba(87, 160, 197, 0.2);
+  --x-cyan-10: rgba(87, 160, 197, 0.1);
+  --x-green-20: rgba(120, 179, 110, 0.2);
+  --x-green-10: rgba(120, 179, 110, 0.1);
+  --x-leaf-green-10: rgba(69, 116, 97, 0.1);
+
+  /* ── Neutrals ────────────────────────────────────────── */
+  --neutral-350: rgb(166, 166, 166);
+  --neutral-125: rgb(238, 238, 238);
+  --neutral-75: rgb(245, 245, 245);
+  --neutral-50: rgb(250, 250, 250);
+  --neutral-0: rgb(255, 255, 255);
+
+  /* ── Semantic aliases ────────────────────────────────── */
+  --text-title: var(--x-black);
+  --text-primary: rgb(113, 113, 113);
+  --text-caption: rgb(166, 166, 166);
+  --text-white: rgb(255, 255, 255);
+
+  --surface-page: rgb(245, 245, 245);
+  --surface-card: var(--neutral-0);
+  --surface-sunken: var(--neutral-75);
+  --surface-scrim: rgba(0, 0, 0, 0.4);
+
+  --border-subtle: rgb(238, 238, 238);
+  --border-bar: rgba(59, 79, 116, 0.1);
+  --border-hairline: rgba(113, 113, 113, 0.1);
+
+  --status-success-ink: var(--x-leaf-green);
+
+  /* ── Type ────────────────────────────────────────────── */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  /* Mona Sans (wide axis) is reserved for wallet / ID chrome. */
+  --font-wide: 'Mona Sans', 'Mona-Sans', var(--font-sans);
+
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --letter-spacing-overline: 1.2px;
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  /* 107px is the gutter of the design's 1440 frame — 7.43% of it. The page is
+     unframed, so past 1440 the gutter keeps that proportion instead of letting
+     the chrome drift to the edges; below it, the literal value stands. */
+  --gutter-desktop: clamp(107px, 7.43vw, 180px);
+  --gutter-mobile: 16px;
+
+  /* ── Radii. These carry meaning: 4 = label, 8 = card,
+        10 = input, 16 = panel, 28 = button, circle = avatar. ── */
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-16: 16px;
+  --radius-28: 28px;
+  --radius-circle: 50%;
+
+  /* ── Elevation. Symmetric haloes, never directional drops. ── */
+  --shadow-card: 0 0 4px rgba(0, 0, 0, 0.25);
+  --shadow-nav-bottom: 0 1px 4px rgba(0, 0, 0, 0.25);
+  --shadow-panel-lg: 0 0 7.774px rgba(0, 0, 0, 0.16), 0 1.532px 12.253px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 0 16px rgba(0, 0, 0, 0.4);
+
+  /* ── Fixed chrome heights ────────────────────────────── */
+  --height-nav-desktop: 80px;
+  --height-info-banner: 52px;
+  --height-button: 50px;
+
+  /* ── Motion. The .fig specifies none; these are the house
+        defaults. Nothing bounces, nothing scales on press. ── */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+}

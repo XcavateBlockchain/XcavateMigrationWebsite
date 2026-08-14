@@ -1,0 +1,604 @@
+/* The migration page itself — chrome, hero, step bar, the two chain panels
+   and the connector between them, the sign panel, and the FAQ. */
+
+/* ── NavigationBar (80px) ───────────────────────────────── */
+
+.nav {
+  height: var(--height-nav-desktop);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 var(--gutter-desktop);
+  background: var(--x-white);
+  border-bottom: 1px solid var(--border-bar);
+  box-shadow: var(--shadow-nav-bottom);
+  position: relative;
+  z-index: 2;
+}
+
+.nav__logo {
+  height: 34px;
+  display: block;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--x-blue);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.nav__link:hover {
+  color: var(--x-cyan);
+}
+
+/* ── InfoBanner (52px). Xblue does the heavy lifting: it is the
+      primary button, the risk banner and the footer rule. ─── */
+
+.info-banner {
+  min-height: var(--height-info-banner);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px var(--gutter-desktop);
+  background: var(--x-blue);
+  color: var(--text-white);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: var(--font-weight-medium);
+}
+
+.info-banner__icon {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: 52px;
+  line-height: 64px;
+  font-weight: var(--font-weight-black);
+  color: var(--x-blue);
+  text-wrap: balance;
+}
+
+.hero__title span {
+  display: block;
+  color: var(--x-cyan);
+}
+
+.hero__lede {
+  max-width: 620px;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+@media (max-width: 720px) {
+  .hero__title {
+    font-size: 32px;
+    line-height: 42px;
+  }
+
+  .hero__lede {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
+
+/* ── Step bar ───────────────────────────────────────────── */
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.steps__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.steps__rule {
+  width: 56px;
+  height: 2px;
+  background: var(--border-subtle);
+  transition: background-color var(--duration-base) var(--ease-standard);
+}
+
+.steps__rule--done {
+  background: var(--x-blue);
+}
+
+.steps__label-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.steps__disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-circle);
+  background: var(--border-subtle);
+  color: var(--text-caption);
+  font-size: 13px;
+  line-height: 100%;
+  font-weight: var(--font-weight-bold);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.steps__disc--active {
+  background: var(--x-blue);
+  color: var(--text-white);
+}
+
+.steps__disc--done {
+  background: var(--x-green);
+  color: var(--text-white);
+}
+
+.steps__label {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--text-caption);
+}
+
+.steps__label--active {
+  color: var(--x-blue);
+}
+
+.steps__label--done {
+  color: var(--status-success-ink);
+}
+
+@media (max-width: 900px) {
+  .steps__rule {
+    width: 24px;
+  }
+
+  .steps__item,
+  .steps {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 620px) {
+  .steps__label {
+    display: none;
+  }
+}
+
+/* ── The flow: panel → connector → panel ────────────────── */
+
+.flow {
+  display: grid;
+  grid-template-columns: 1fr 140px 1fr;
+  align-items: stretch;
+}
+
+.panel {
+  padding: 32px;
+  border-radius: var(--radius-16);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-panel-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 300px;
+}
+
+.panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.panel__ident {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.panel__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.panel__eyebrow {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--text-caption);
+}
+
+.panel__title {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold);
+  color: var(--x-black);
+}
+
+.chain-mark {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Each panel body fills the panel so the action sits at the bottom edge. */
+.panel__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panel__hint {
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.panel__actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel__locked {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0.6;
+  color: var(--text-caption);
+  text-align: center;
+}
+
+.panel__locked p {
+  max-width: 280px;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* ── Connector ──────────────────────────────────────────── */
+
+.connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.connector__disc {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-circle);
+  background: var(--x-white);
+  box-shadow: var(--shadow-card);
+  color: var(--text-caption);
+  transition:
+    width var(--duration-base) var(--ease-standard),
+    height var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.connector__disc--done {
+  color: var(--x-green);
+}
+
+/* Step 3 has no card of its own: when signing unlocks, the connector grows
+   into the primary action and shimmers until it is pressed. */
+.connector__disc--action {
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--x-blue);
+  color: var(--text-white);
+  animation: rx-connector-halo 2.6s var(--ease-standard) infinite;
+}
+
+.connector__disc--action:hover {
+  background: rgb(48, 65, 96);
+}
+
+/* The shimmer is a light band sweeping the disc, clipped to the circle. */
+.connector__disc--action::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.42) 50%,
+    transparent 62%
+  );
+  animation: rx-connector-shimmer 2.6s var(--ease-standard) infinite;
+}
+
+.connector__disc--action > svg {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes rx-connector-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes rx-connector-halo {
+  0% {
+    box-shadow: 0 0 0 0 var(--x-blue-30);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 18px rgba(59, 79, 116, 0);
+  }
+}
+
+.connector__caption {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+  text-align: center;
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.connector__caption--action {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--x-blue);
+}
+
+.connector__caption--done {
+  color: var(--status-success-ink);
+}
+
+/* The house rule is no motion; this is the one exception, and it yields. */
+@media (prefers-reduced-motion: reduce) {
+  .connector__disc--action,
+  .connector__disc--action::after {
+    animation: none;
+  }
+
+  .connector__disc--action {
+    box-shadow: 0 0 0 6px var(--x-blue-10), var(--shadow-card);
+  }
+}
+
+@media (max-width: 900px) {
+  .flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel {
+    min-height: 0;
+  }
+
+  .connector {
+    padding: 20px 0;
+  }
+
+  /* Stacked, the arrow points down the page. */
+  .connector__disc svg {
+    transform: rotate(90deg);
+  }
+}
+
+/* ── Outcome — what the flow leaves behind: the registration, or
+      a failure the sign modal is no longer on screen to show. ── */
+
+.outcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.outcome__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--status-success-ink);
+}
+
+.outcome__text svg {
+  flex-shrink: 0;
+}
+
+.outcome__actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.outcome__actions .btn-inline {
+  align-self: center;
+}
+
+/* ── FAQ ────────────────────────────────────────────────── */
+
+.faq {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faq__title {
+  margin-bottom: 12px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--x-blue);
+  text-align: center;
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.faq__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--x-black);
+}
+
+.faq__chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--x-blue);
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.faq__chevron--open {
+  transform: rotate(180deg);
+}
+
+.faq__answer {
+  padding: 0 4px 18px;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+
+.footer {
+  flex-shrink: 0;
+  padding: 24px var(--gutter-desktop);
+  background: var(--x-white);
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer__logo img {
+  height: 24px;
+  display: block;
+}
+
+.footer__copy {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-caption);
+}
+
+@media (max-width: 1100px) {
+  .nav,
+  .info-banner,
+  .footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav,
+  .info-banner,
+  .footer {
+    padding-left: var(--gutter-mobile);
+    padding-right: var(--gutter-mobile);
+  }
+
+  .panel {
+    padding: 24px;
+  }
+}
