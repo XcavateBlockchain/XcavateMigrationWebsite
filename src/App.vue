@@ -284,16 +284,6 @@ function copyReceipt() {
   if (!receipt.value) return
   copy(receiptJson(receipt.value), copiedReceipt)
 }
-
-function resetAll() {
-  selected.value = null
-  check.value = 'idle'
-  existing.value = null
-  changeWallet()
-  solanaNotice.value = ''
-  resetSubmit()
-  successOpen.value = false
-}
 </script>
 
 <template>
